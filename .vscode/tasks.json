@@ -15,6 +15,7 @@
                 "CSFML_projeto/CSFML/lib/gcc",
                 "-lcsfml-graphics",
                 "-lcsfml-window",
+                "-lcsfml-audio",
                 "-lcsfml-system"
             ],
             "group": {
