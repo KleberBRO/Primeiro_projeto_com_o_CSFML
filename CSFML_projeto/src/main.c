@@ -164,8 +164,8 @@ int main() {
 
         sfVector2f direcao = {x - inimigo_X, y - inimigo_y};
         
-        inimigo_X += direcao.x*(100/Distancia*0.01);
-        inimigo_y += direcao.y*(100/Distancia*0.01);
+        inimigo_X += direcao.x*(100/Distancia*0.02);
+        inimigo_y += direcao.y*(100/Distancia*0.02);
 
         // diferença entre as posições entre x e a moeda
         float dxM = x + (rect_Circulo.width*0.1/2) - (moeda_X + (rect_Moeda.width*0.3/2));
@@ -176,8 +176,8 @@ int main() {
         //caso eles x e moeda se toquem
         if (Distancia_moeda < (rect_Circulo.width*0.1/2) + (rect_Moeda.width*0.3/2)) {
             pontos++;
-            moeda_X = (rand() % 1024) - 37;
-            moeda_y = (rand() % 768) - 37;
+            moeda_X = (rand() % 987);
+            moeda_y = (rand() % 731);
         }
         
 
