@@ -52,6 +52,16 @@ int main() {
     sfText_setFont(textoPontos, fonte);
     sfText_setCharacterSize(textoPontos, 30);
     sfText_setFillColor(textoPontos, sfWhite);
+
+    //textura do background
+    sfTexture * tBackground;
+    tBackground = sfTexture_createFromFile("CSFML_projeto/imgs/fundo.png",NULL);    
+    sfSprite * sBackground = sfSprite_create();
+    sfSprite_setTexture(sBackground, tBackground, sfTrue);
+    sfSprite_setPosition(sBackground, (sfVector2f){0,0});
+
+    // Escala o sprite para preencher a janela
+    sfVector2u tamanho_Bg = sfTexture_getSize(tBackground);
     
     //textura dos Circulos
     sfTexture * tCirculo;
@@ -70,7 +80,7 @@ int main() {
         sCirculo2[i] = sfSprite_create();
         sfSprite_setTexture(sCirculo2[i], tCirculo, 0);
         sfSprite_setScale(sCirculo2[i], (sfVector2f){0.1 ,0.1});
-        sfSprite_setColor(sCirculo2[i], sfColor_fromRGBA(255, 255, 0, 255));
+        sfSprite_setColor(sCirculo2[i], sfColor_fromRGBA(255, 0, 0, 255));
     }
 
     //textura da moeda
@@ -186,7 +196,7 @@ int main() {
                     // Hipotenusa
                     float distancia_inimigos = sqrt(pow(dx[i], 2) + pow(dy[i], 2));
                     //caso eles se toquem
-                    if (distancia_inimigos < (rect_Circulo2[i].width*0.1/2) + (rect_Circulo2[j].width*0.1/2)) {
+                    if (distancia_inimigos < (rect_Circulo2[i].width*0.1/2) + (rect_Circulo2[j].width*0.1/2)+40) {
                         if (Distancia[i]>Distancia[j])
                         {
                             direcao.x =  direcao.x*vx*0.1;
@@ -244,6 +254,14 @@ int main() {
 
 
         //Renderiza a tela
+        for(int i = 0; i <sfWindow_getSize(janela).y; i += tamanho_Bg.y){
+            for(int j = 0; j < sfWindow_getSize(janela).x; j += tamanho_Bg.x){
+            // Define a posição do sprite para desenhar a textura  
+            sfSprite_setPosition(sBackground, (sfVector2f){(float)j, (float)i});
+            sfRenderWindow_drawSprite(janela, sBackground, NULL);          
+            }
+        }
+        sfRenderWindow_drawSprite(janela, sBackground, NULL);
         sfRenderWindow_drawSprite(janela, sCirculo, NULL);
         for (int i = 1; i <= inimigos; i++)  {
             sfRenderWindow_drawSprite(janela, sCirculo2[i-1], NULL);
@@ -265,7 +283,8 @@ int main() {
 
     sfClock_destroy(clock);
     sfText_destroy(texto);
-
+    sfTexture_destroy(tBackground);
+    sfSprite_destroy(sBackground);
     sfText_destroy(textoPontos);
     sfFont_destroy(fonte);
     sfTexture_destroy(tMoeda);
