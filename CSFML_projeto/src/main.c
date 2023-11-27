@@ -26,6 +26,7 @@ int main() {
     bool gameover = false;
     int pontos = 0, aux_pontos = 0;
     int inimigos = 1;
+    int qntd_inimigos = 50;
 
     //gerar janela
     sfRenderWindow * janela;
@@ -74,8 +75,8 @@ int main() {
     sfSprite_setScale(sCirculo, (sfVector2f){0.1 ,0.1});
 
     //Sprite do circulo inimigo
-    sfSprite * sCirculo2[10];
-    for (int i = 0; i < 10; i++)
+    sfSprite * sCirculo2[qntd_inimigos];
+    for (int i = 0; i < qntd_inimigos; i++)
     {
         sCirculo2[i] = sfSprite_create();
         sfSprite_setTexture(sCirculo2[i], tCirculo, 0);
@@ -96,15 +97,15 @@ int main() {
     //variáveis de posição e velocidade
     float x = 0.0, y = 0.0;
     float vx = 0.0, vy = 0.0;
-    float inimigo_X[10], inimigo_y[10];
+    float inimigo_X[qntd_inimigos], inimigo_y[qntd_inimigos];
     inimigo_X[0] = 700;
     inimigo_y[0] = 700;
     float moeda_X = 400, moeda_y = 400;
     
     //Hitbox do sprites
     sfFloatRect rect_Circulo = sfSprite_getLocalBounds(sCirculo);
-    sfFloatRect rect_Circulo2[10];
-    for (int i = 0; i < 10; i++) {
+    sfFloatRect rect_Circulo2[qntd_inimigos];
+    for (int i = 0; i < qntd_inimigos; i++) {
         rect_Circulo2[i] = sfSprite_getLocalBounds(sCirculo2[i]);
     }
     
@@ -172,7 +173,7 @@ int main() {
             vx = - vx*0.1;
         }
 
-        float dx[10], dy[10], Distancia[10];
+        float dx[qntd_inimigos], dy[qntd_inimigos], Distancia[qntd_inimigos];
 
         for (int i = 0; i <= inimigos-1; i++)  {
             dx[i] = x + (rect_Circulo.width*0.1/2) - (inimigo_X[i] + (rect_Circulo2[i].width*0.1/2));
@@ -196,11 +197,14 @@ int main() {
                     // Hipotenusa
                     float distancia_inimigos = sqrt(pow(dx[i], 2) + pow(dy[i], 2));
                     //caso eles se toquem
-                    if (distancia_inimigos < (rect_Circulo2[i].width*0.1/2) + (rect_Circulo2[j].width*0.1/2)+40) {
-                        if (Distancia[i]>Distancia[j])
+                    if (distancia_inimigos < (rect_Circulo2[i].width*0.1/2) + (rect_Circulo2[j].width*0.1/2)+20) {
+                        if (Distancia[i]<Distancia[j])
                         {
-                            direcao.x =  direcao.x*vx*0.1;
-                            direcao.y =  direcao.y*vy*0.1;
+                            direcao.x +=  direcao.x*1.1;
+                            direcao.y +=  direcao.y*1.1;
+                        } else{
+                            direcao.x =  direcao.x*0.3;
+                            direcao.y =  direcao.y*0.3;
                         }
                         
                     }
@@ -228,14 +232,15 @@ int main() {
             moeda_y = (rand() % 731);
         }
 
+        //Spawn de um novo inimigo
         if (pontos == inimigos*3 && pontos == aux_pontos-inimigos+1)
         {
          inimigos++;
          aux_pontos++;
          float spawnX, spawnY;
          do {
-            spawnX = (rand() % 1324 - 100);
-            spawnY = (rand() % 731 - 100);
+            spawnX = (rand() % 1324 - 200);
+            spawnY = (rand() % 731 - 200);
          } while (spawnX*spawnY >= 0 && spawnX*spawnY <= 1024*768);
          
 
@@ -291,7 +296,7 @@ int main() {
     sfSprite_destroy(sMoeda);
     sfTexture_destroy(tCirculo);
     sfSprite_destroy(sCirculo);
-        for (int i = 0; i < 10; i++)
+        for (int i = 0; i < qntd_inimigos; i++)
     {
         sfSprite_destroy(sCirculo2[i]);
     }
